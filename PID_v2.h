@@ -6,7 +6,7 @@ class PID {
   // Constants used in some of the functions below
   enum Mode { Manual = 0, Automatic = 1 };
   enum Direction { Direct = 0, Reverse = 1 };
-  enum P_On { Measurement = 0, Error = 1 };
+  enum class P_On { Measurement = 0, Error = 1 };
 
   // commonly used functions
   // **************************************************************************
@@ -94,10 +94,10 @@ class PID {
 };
 
 #ifndef PID_v2_SKIP_COMPAT_WITH_v1
-const PID::Mode AUTOMATIC = PID::Mode::Automatic;
-const PID::Mode MANUAL = PID::Mode::Manual;
-const PID::Direction DIRECT = PID::Direction::Direct;
-const PID::Direction REVERSE = PID::Direction::Reverse;
+const PID::Mode AUTOMATIC = PID::Automatic;
+const PID::Mode MANUAL = PID::Manual;
+const PID::Direction DIRECT = PID::Direct;
+const PID::Direction REVERSE = PID::Reverse;
 const PID::P_On P_ON_M = PID::P_On::Measurement;
 const PID::P_On P_ON_E = PID::P_On::Error;
 #endif
