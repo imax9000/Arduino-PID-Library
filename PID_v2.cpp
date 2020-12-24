@@ -18,7 +18,7 @@
  *    reliable defaults, so we need to have the user set them.
  ***************************************************************************/
 PID::PID(double *Input, double *Output, double *Setpoint, double Kp, double Ki,
-         double Kd, int POn, int ControllerDirection) {
+         double Kd, PID::P_On POn, PID::Direction ControllerDirection) {
   myOutput = Output;
   myInput = Input;
   mySetpoint = Setpoint;
@@ -41,8 +41,8 @@ PID::PID(double *Input, double *Output, double *Setpoint, double Kp, double Ki,
  ***************************************************************************/
 
 PID::PID(double *Input, double *Output, double *Setpoint, double Kp, double Ki,
-         double Kd, int ControllerDirection)
-    : PID::PID(Input, Output, Setpoint, Kp, Ki, Kd, P_ON_E,
+         double Kd, Direction ControllerDirection)
+    : PID::PID(Input, Output, Setpoint, Kp, Ki, Kd, P_On::Error,
                ControllerDirection) {}
 
 /* Compute()
@@ -100,11 +100,11 @@ bool PID::Compute() {
  * it's called automatically from the constructor, but tunings can also
  * be adjusted on the fly during normal operation
  ******************************************************************************/
-void PID::SetTunings(double Kp, double Ki, double Kd, int POn) {
+void PID::SetTunings(double Kp, double Ki, double Kd, P_On POn) {
   if (Kp < 0 || Ki < 0 || Kd < 0) return;
 
   pOn = POn;
-  pOnE = POn == P_ON_E;
+  pOnE = POn == P_On::Error;
 
   dispKp = Kp;
   dispKi = Ki;
@@ -115,7 +115,7 @@ void PID::SetTunings(double Kp, double Ki, double Kd, int POn) {
   ki = Ki * SampleTimeInSec;
   kd = Kd / SampleTimeInSec;
 
-  if (controllerDirection == REVERSE) {
+  if (controllerDirection == Direction::Reverse) {
     kp = (0 - kp);
     ki = (0 - ki);
     kd = (0 - kd);
@@ -172,10 +172,10 @@ void PID::SetOutputLimits(double Min, double Max) {
  * when the transition from manual to auto occurs, the controller is
  * automatically initialized
  ******************************************************************************/
-void PID::SetMode(int Mode) {
-  bool newAuto = (Mode == AUTOMATIC);
+void PID::SetMode(Mode Mode) {
+  bool newAuto = (Mode == Mode::Automatic);
   if (newAuto && !inAuto) { /*we just went from manual to auto*/
-    PID::Initialize();
+    this->Initialize();
   }
   inAuto = newAuto;
 }
@@ -199,7 +199,7 @@ void PID::Initialize() {
  * know which one, because otherwise we may increase the output when we should
  * be decreasing.  This is called from the constructor.
  ******************************************************************************/
-void PID::SetControllerDirection(int Direction) {
+void PID::SetControllerDirection(Direction Direction) {
   if (inAuto && Direction != controllerDirection) {
     kp = (0 - kp);
     ki = (0 - ki);
@@ -216,5 +216,7 @@ void PID::SetControllerDirection(int Direction) {
 double PID::GetKp() { return dispKp; }
 double PID::GetKi() { return dispKi; }
 double PID::GetKd() { return dispKd; }
-int PID::GetMode() { return inAuto ? AUTOMATIC : MANUAL; }
-int PID::GetDirection() { return controllerDirection; }
+PID::Mode PID::GetMode() {
+  return inAuto ? Mode::Automatic : Mode::Manual;
+}
+PID::Direction PID::GetDirection() { return controllerDirection; }

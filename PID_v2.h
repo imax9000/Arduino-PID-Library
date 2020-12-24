@@ -4,28 +4,25 @@
 
 class PID {
  public:
-// Constants used in some of the functions below
-#define AUTOMATIC 1
-#define MANUAL 0
-#define DIRECT 0
-#define REVERSE 1
-#define P_ON_M 0
-#define P_ON_E 1
+  // Constants used in some of the functions below
+  enum Mode { Manual = 0, Automatic = 1 };
+  enum Direction { Direct = 0, Reverse = 1 };
+  enum P_On { Measurement = 0, Error = 1 };
 
   // commonly used functions
   // **************************************************************************
   PID(double *, double *,
       double *,  // * constructor.  links the PID to the Input, Output, and
-      double, double, double, int,
-      int);  //   Setpoint.  Initial tuning parameters are also set here.
-             //   (overload for specifying proportional mode)
+      double, double, double, P_On,
+      Direction);  //   Setpoint.  Initial tuning parameters are also set here.
+                   //   (overload for specifying proportional mode)
 
   PID(double *, double *,
       double *,  // * constructor.  links the PID to the Input, Output, and
       double, double, double,
-      int);  //   Setpoint.  Initial tuning parameters are also set here
+      Direction);  //   Setpoint.  Initial tuning parameters are also set here
 
-  void SetMode(int Mode);  // * sets PID to either Manual (0) or Auto (non-0)
+  void SetMode(Mode Mode);  // * sets PID to either Manual (0) or Auto (non-0)
 
   bool Compute();  // * performs the PID calculation.  it should be
                    //   called every time loop() cycles. ON/OFF and
@@ -46,24 +43,25 @@ class PID {
                 //   of changing tunings during runtime for Adaptive control
   void SetTunings(double,
                   double,  // * overload for specifying proportional mode
-                  double, int);
+                  double, P_On);
 
   void SetControllerDirection(
-      int);  // * Sets the Direction, or "Action" of the controller. DIRECT
-             //   means the output will increase when error is positive. REVERSE
-             //   means the opposite.  it's very unlikely that this will be
-             //   needed once it is set in the constructor.
+      Direction);  // * Sets the Direction, or "Action" of the controller.
+                   // DIRECT
+                   //   means the output will increase when error is positive.
+                   //   REVERSE means the opposite.  it's very unlikely that
+                   //   this will be needed once it is set in the constructor.
   void SetSampleTime(
       int);  // * sets the frequency, in Milliseconds, with which
              //   the PID calculation is performed.  default is 100
 
   // Display functions
   // ****************************************************************
-  double GetKp();      // These functions query the pid for interal values.
-  double GetKi();      //  they were created mainly for the pid front-end,
-  double GetKd();      // where it's important to know what is actually
-  int GetMode();       //  inside the PID.
-  int GetDirection();  //
+  double GetKp();  // These functions query the pid for interal values.
+  double GetKi();  //  they were created mainly for the pid front-end,
+  double GetKd();  // where it's important to know what is actually
+  Mode GetMode();  //  inside the PID.
+  Direction GetDirection();  //
 
  private:
   void Initialize();
@@ -76,8 +74,8 @@ class PID {
   double ki;  // * (I)ntegral Tuning Parameter
   double kd;  // * (D)erivative Tuning Parameter
 
-  int controllerDirection;
-  int pOn;
+  Direction controllerDirection;
+  P_On pOn;
 
   double *myInput;   // * Pointers to the Input, Output, and Setpoint variables
   double *myOutput;  //   This creates a hard link between the variables and the
@@ -92,4 +90,14 @@ class PID {
   double outMin, outMax;
   bool inAuto, pOnE;
 };
+
+#ifndef PID_v2_SKIP_COMPAT_WITH_v1
+const PID::Mode AUTOMATIC = PID::Mode::Automatic;
+const PID::Mode MANUAL = PID::Mode::Manual;
+const PID::Direction DIRECT = PID::Direction::Direct;
+const PID::Direction REVERSE = PID::Direction::Reverse;
+const PID::P_On P_ON_M = PID::P_On::Measurement;
+const PID::P_On P_ON_E = PID::P_On::Error;
+#endif
+
 #endif  // PID_v2_h
