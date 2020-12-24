@@ -10,57 +10,57 @@ class PID {
 
   // commonly used functions
   // **************************************************************************
-  PID(double *, double *,
-      double *,  // * constructor.  links the PID to the Input, Output, and
-      double, double, double, P_On,
-      Direction);  //   Setpoint.  Initial tuning parameters are also set here.
-                   //   (overload for specifying proportional mode)
+  // Constructor. Links the PID to the Input, Output, and Setpoint. Initial
+  // tuning parameters are also set here. (overload for specifying proportional
+  // mode)
+  PID(double *Input, double *Output, double *Setpoint, double Kp, double Ki,
+      double Kd, P_On, Direction);
 
-  PID(double *, double *,
-      double *,  // * constructor.  links the PID to the Input, Output, and
-      double, double, double,
-      Direction);  //   Setpoint.  Initial tuning parameters are also set here
+  // Constructor. Links the PID to the Input, Output, and Setpoint. Initial
+  // tuning parameters are also set here
+  PID(double *Input, double *Output, double *Setpoint, double Kp, double Ki,
+      double Kd, Direction);
 
-  void SetMode(Mode Mode);  // * sets PID to either Manual (0) or Auto (non-0)
+  // Sets PID to either Manual (0) or Auto (non-0)
+  void SetMode(Mode Mode);
 
-  bool Compute();  // * performs the PID calculation.  it should be
-                   //   called every time loop() cycles. ON/OFF and
-                   //   calculation frequency can be set using SetMode
-                   //   SetSampleTime respectively
+  // Performs the PID calculation. It should be called every time loop()
+  // cycles. ON/OFF and calculation frequency can be set using SetMode and
+  // SetSampleTime respectively
+  bool Compute();
 
-  void SetOutputLimits(double,
-                       double);  // * clamps the output to a specific range.
-                                 // 0-255 by default, but
-                                 //   it's likely the user will want to change
-                                 //   this depending on the application
+  // Clamps the output to a specific range. 0-255 by default, but it's likely
+  // the user will want to change this depending on the application
+  void SetOutputLimits(double, double);
 
   // available but not commonly used functions
   // ********************************************************
-  void SetTunings(
-      double, double,  // * While most users will set the tunings once in the
-      double);         //   constructor, this function gives the user the option
-                //   of changing tunings during runtime for Adaptive control
-  void SetTunings(double,
-                  double,  // * overload for specifying proportional mode
-                  double, P_On);
+  // While most users will set the tunings once in the constructor, this
+  // function gives the user the option of changing tunings during runtime for
+  // Adaptive control
+  void SetTunings(double, double, double);
+  // Overload for specifying proportional mode
+  void SetTunings(double, double, double, P_On);
 
-  void SetControllerDirection(
-      Direction);  // * Sets the Direction, or "Action" of the controller.
-                   // DIRECT
-                   //   means the output will increase when error is positive.
-                   //   REVERSE means the opposite.  it's very unlikely that
-                   //   this will be needed once it is set in the constructor.
-  void SetSampleTime(
-      int);  // * sets the frequency, in Milliseconds, with which
-             //   the PID calculation is performed.  default is 100
+  // Sets the Direction, or "Action" of the controller. DIRECT means the output
+  // will increase when error is positive. REVERSE means the opposite. It's very
+  // unlikely that this will be needed once it is set in the constructor.
+  void SetControllerDirection(Direction);
+
+  // Sets the frequency, in Milliseconds, with which the PID calculation is
+  // performed. Default is 100.
+  void SetSampleTime(int);
 
   // Display functions
   // ****************************************************************
-  double GetKp() const;  // These functions query the pid for interal values.
-  double GetKi() const;  //  they were created mainly for the pid front-end,
-  double GetKd() const;  // where it's important to know what is actually
-  Mode GetMode() const;  //  inside the PID.
-  Direction GetDirection() const;  //
+  // These functions query the pid for interal values.they were created mainly
+  // for the pid front-end, where it's important to know what is actually inside
+  // the PID.
+  double GetKp() const;
+  double GetKi() const;
+  double GetKd() const;
+  Mode GetMode() const;
+  Direction GetDirection() const;
   double GetLastP() const;
   double GetLastI() const;
   double GetLastD() const;
@@ -79,11 +79,10 @@ class PID {
   Direction controllerDirection;
   P_On pOn;
 
-  double *myInput;   // * Pointers to the Input, Output, and Setpoint variables
-  double *myOutput;  //   This creates a hard link between the variables and the
-  double
-      *mySetpoint;  //   PID, freeing the user from having to constantly tell us
-                    //   what these values are.  with pointers we'll just know.
+  // Pointers to the Input, Output, and Setpoint variables. This creates a hard
+  // link between the variables and the PID, freeing the user from having to
+  // constantly tell us what these values are.  with pointers we'll just know.
+  double *myInput, *myOutput, *mySetpoint;
 
   unsigned long lastTime;
   double outputSum, lastInput;
