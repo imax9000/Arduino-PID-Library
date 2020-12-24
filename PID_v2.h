@@ -1,5 +1,5 @@
-#ifndef PID_v1_h
-#define PID_v1_h
+#ifndef PID_v2_h
+#define PID_v2_h
 #define LIBRARY_VERSION 1.2.1
 
 class PID {
@@ -92,4 +92,4 @@ class PID {
   double outMin, outMax;
   bool inAuto, pOnE;
 };
-#endif
+#endif  // PID_v2_h

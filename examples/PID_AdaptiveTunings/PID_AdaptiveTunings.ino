@@ -9,7 +9,7 @@
  * Parameters when we're farther away.
  ********************************************************/
 
-#include <PID_v1.h>
+#include <PID_v2.h>
 
 #define PIN_INPUT 0
 #define PIN_OUTPUT 3
