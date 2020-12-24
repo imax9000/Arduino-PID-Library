@@ -61,6 +61,9 @@ class PID {
   double GetKd() const;  // where it's important to know what is actually
   Mode GetMode() const;  //  inside the PID.
   Direction GetDirection() const;  //
+  double GetLastP() const;
+  double GetLastI() const;
+  double GetLastD() const;
 
  private:
   void Initialize();
@@ -84,6 +87,7 @@ class PID {
 
   unsigned long lastTime;
   double outputSum, lastInput;
+  double lastP, lastD;
 
   unsigned long SampleTime;
   double outMin, outMax;

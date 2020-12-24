@@ -64,7 +64,10 @@ bool PID::Compute() {
     outputSum += (ki * error);
 
     /*Add Proportional on Measurement, if P_ON_M is specified*/
-    if (!pOnE) outputSum -= kp * dInput;
+    if (!pOnE) {
+      outputSum -= kp * dInput;
+      this->lastP = -kp * dInput;
+    }
 
     if (outputSum > outMax)
       outputSum = outMax;
@@ -73,13 +76,16 @@ bool PID::Compute() {
 
     /*Add Proportional on Error, if P_ON_E is specified*/
     double output;
-    if (pOnE)
+    if (pOnE) {
       output = kp * error;
-    else
+      this->lastP = kp * error;
+    } else {
       output = 0;
+    }
 
     /*Compute Rest of PID Output*/
     output += outputSum - kd * dInput;
+    this->lastD = -kd * dInput;
 
     if (output > outMax)
       output = outMax;
@@ -220,3 +226,6 @@ PID::Mode PID::GetMode() const {
   return inAuto ? Mode::Automatic : Mode::Manual;
 }
 PID::Direction PID::GetDirection() const { return controllerDirection; }
+double PID::GetLastP() const { return this->lastP; }
+double PID::GetLastI() const { return this->outputSum; }
+double PID::GetLastD() const { return this->lastD; }
