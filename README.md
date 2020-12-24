@@ -3,7 +3,7 @@
 This is an update/refactor of https://github.com/br3ttb/Arduino-PID-Library,
 since the original library seems pretty much abandoned.
 
-For an explanation of many of the implementation details see an exccellent
+For an explanation of many of the implementation details see the excellent
 series of posts by the original library author:
 http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
 
