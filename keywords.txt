@@ -7,6 +7,9 @@
 #######################################
 
 PID	KEYWORD1
+Mode	KEYWORD1
+Direction	KEYWORD1
+P_On	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -34,3 +37,9 @@ DIRECT	LITERAL1
 REVERSE	LITERAL1
 P_ON_E	LITERAL1
 P_ON_M	LITERAL1
+Automatic	LITERAL1
+Manual	LITERAL1
+Direct	LITERAL1
+Reverse	LITERAL1
+Error	LITERAL1
+Measurement	LITERAL1
