@@ -10,6 +10,7 @@ PID	KEYWORD1
 Mode	KEYWORD1
 Direction	KEYWORD1
 P_On	KEYWORD1
+PID_v2	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -29,6 +30,10 @@ GetDirection	KEYWORD2
 GetLastP	KEYWORD2
 GetLastI	KEYWORD2
 GetLastD	KEYWORD2
+Start	KEYWORD2
+Run	KEYWORD2
+Setpoint	KEYWORD2
+GetSetpoint	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

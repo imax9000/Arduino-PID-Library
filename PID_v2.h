@@ -93,6 +93,37 @@ class PID {
   bool inAuto, pOnE;
 };
 
+class PID_v2 : public PID {
+ public:
+  PID_v2(double Kp, double Ki, double Kd, Direction dir, P_On POn = P_On::Error)
+      : PID(&this->input, &this->output, &this->setpoint, Kp, Ki, Kd, POn,
+            dir) {}
+
+  void Setpoint(double v) { this->setpoint = v; }
+  double GetSetpoint() const { return this->setpoint; }
+
+  // Initializes and enables PID controller. Current input and output values
+  // are needed for a smooth transision to automatic control.
+  void Start(double input_, double currentOutput, double setpoint_) {
+    this->input = input_;
+    this->output = currentOutput;
+    this->setpoint = setpoint_;
+    this->SetMode(Mode::Automatic);
+  }
+
+  // Recompute the values and return the output value. Note that computation
+  // (and therefore, change of output value) will happen only once every sample
+  // time, set by SetSampleTime method.
+  double Run(double input_) {
+    this->input = input_;
+    this->Compute();
+    return this->output;
+  }
+
+ private:
+  double input, output, setpoint;
+};
+
 #ifndef PID_v2_SKIP_COMPAT_WITH_v1
 const PID::Mode AUTOMATIC = PID::Automatic;
 const PID::Mode MANUAL = PID::Manual;
