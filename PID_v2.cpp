@@ -178,8 +178,8 @@ void PID::SetOutputLimits(double Min, double Max) {
  * when the transition from manual to auto occurs, the controller is
  * automatically initialized
  ******************************************************************************/
-void PID::SetMode(Mode Mode) {
-  bool newAuto = (Mode == Mode::Automatic);
+void PID::SetMode(Mode mode) {
+  bool newAuto = (mode == Mode::Automatic);
   if (newAuto && !inAuto) { /*we just went from manual to auto*/
     this->Initialize();
   }
